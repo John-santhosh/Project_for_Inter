@@ -48,8 +48,6 @@ const AllTask = ({ id, task_msg, task_date, is_completed }) => {
                       task_msg,
                       time_zone,
                     };
-                    // console.log(data);
-                    // console.log(id);
                     updateTask(id, data);
                   }}
                 >
