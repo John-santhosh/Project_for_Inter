@@ -14,9 +14,9 @@
 }
 
 :root {
-  --clr-bg-primary-1: #ffe4e644;
+  --clr-bg-primary-1: #ffe4e657;
   --clr-bg-1: #a5f3fc2e;
-  --clr-dark: #1e1b4b;
+  --clr-dark: #0c0a1f;
   --clr-grey-50: #e1e1e1;
   --transition: 0.3s all;
 }
@@ -24,6 +24,7 @@
 nav {
   height: 3rem;
   box-shadow: 1px 1px 10px #00000027;
+  background-color: #fff;
 }
 .flex-center {
   display: flex;
@@ -44,4 +45,18 @@ button {
   outline: transparent;
   background-color: transparent;
   cursor: pointer;
+}
+
+.custom-loader {
+  width: 50px;
+  height: 50px;
+  border-radius: 50%;
+  border: 8px solid;
+  border-color: #766df4 #0000;
+  animation: s1 1s infinite;
+}
+@keyframes s1 {
+  to {
+    transform: rotate(0.5turn);
+  }
 }

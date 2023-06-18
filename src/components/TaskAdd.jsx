@@ -6,34 +6,54 @@ import { useGlobalContext } from "../Context";
 import AllTask from "./AllTask";
 const TaskAdd = () => {
   const [taskOpen, setTaskOpen] = useState(false);
-  const { allTask } = useGlobalContext();
+  const { allTask, task_loading } = useGlobalContext();
 
   return (
-    <Wrapper className="section-center">
-      <h2>Test</h2>
-      <p className="">Sloovi.com</p>
-      <em>Add description</em>
-      <div>
-        <div className="addTask flex-center">
-          <p className="flex-center">TASKS {0}</p>
-          <button
-            className="flex-center"
-            onClick={() => setTaskOpen(!taskOpen)}
-          >
-            <IoMdAdd />
-          </button>
+    <GridWrapper>
+      <nav></nav>
+      <div className="aside"></div>
+      <Wrapper className="section-center">
+        <div>
+          <h2>Test</h2>
+          <p className="">Sloovi.com</p>
+          <em>Add description</em>
         </div>
-        {taskOpen && <TaskEditor delete={false} />}
-      </div>
-      {allTask.map((task) => {
-        return <AllTask key={task.id} {...task} />;
-      })}
-    </Wrapper>
+        <div className="heading">
+          <div className="addTask flex-center">
+            <p className="flex-center">TASKS {allTask.length}</p>
+            <button
+              className="flex-center"
+              onClick={() => setTaskOpen(!taskOpen)}
+            >
+              <IoMdAdd />
+            </button>
+          </div>
+          {taskOpen && <TaskEditor setTaskOpen={setTaskOpen} />}
+        </div>
+        {task_loading ? (
+          <p className="custom-loader"></p>
+        ) : (
+          allTask.map((task) => {
+            return <AllTask key={task.id} {...task} />;
+          })
+        )}
+      </Wrapper>
+    </GridWrapper>
   );
 };
 
 export default TaskAdd;
 const Wrapper = styled.div`
+  > div:first-child {
+    margin-bottom: 3rem;
+    p {
+      color: dodgerblue;
+    }
+    em {
+      color: grey;
+      font-size: 0.8rem;
+    }
+  }
   .addTask {
     background-color: #a9a9a918;
     border-bottom: 1px solid var(--clr-grey-50);
@@ -49,7 +69,33 @@ const Wrapper = styled.div`
   }
   > div {
     border-radius: 5px;
+    width: 450px;
+  }
+  .heading {
     border: 1px solid var(--clr-grey-50);
-    width: 500px;
+  }
+  .custom-loader {
+    margin-left: 240px;
+    margin-top: 3rem;
+  }
+`;
+
+const GridWrapper = styled.div`
+  display: grid;
+  min-height: 100vh;
+  grid-template-columns: 1fr 4fr;
+  /* grid-template-rows: 1fr 5fr; */
+  nav {
+    grid-column: 2/3;
+    margin-bottom: 1rem;
+  }
+  .aside {
+    grid-row: 1/3;
+    grid-column: 1/2;
+    background-color: var(--clr-dark);
+  }
+  .section-center {
+    grid-template-rows: 2/3;
+    min-height: calc(100vh - 4rem);
   }
 `;

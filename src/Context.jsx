@@ -1,8 +1,14 @@
 import axios from "axios";
 import { createContext, useContext, useEffect, useReducer } from "react";
 import { reducer } from "./reducer/Reducer";
-import { SELECT_USERS, SET_ALL_TASK } from "./actions";
+import {
+  SELECT_USERS,
+  SET_ALL_TASK,
+  TASK_LOADING,
+  TASK_LOADING_SUCCESS,
+} from "./actions";
 import { deleteURL, updateURL } from "./helper/data";
+import { toast } from "react-toastify";
 
 const GlobalContext = createContext();
 
@@ -24,6 +30,7 @@ const AppContext = ({ children }) => {
       time_zone: "",
     },
     allTask: [],
+    task_loading: true,
   };
 
   const [state, dispatch] = useReducer(reducer, initialState);
@@ -39,6 +46,7 @@ const AppContext = ({ children }) => {
 
   // const getAll task from API
   const getAllTask = async () => {
+    dispatch({ type: TASK_LOADING });
     try {
       const { data } = await axios(
         `https://stage.api.sloovi.com/task/lead_65b171d46f3945549e3baa997e3fc4c2?company_id=${
@@ -54,7 +62,8 @@ const AppContext = ({ children }) => {
       );
 
       const task = data.results;
-      console.log(task);
+      // console.log(task);
+      dispatch({ type: TASK_LOADING_SUCCESS });
       setAllTask(task);
     } catch (error) {
       console.log(error.message);
@@ -62,7 +71,7 @@ const AppContext = ({ children }) => {
   };
 
   // fetch select options
-  async function fetchData() {
+  async function fetchSelectUsers() {
     try {
       const { data } = await axios.get(
         `https://stage.api.sloovi.com/team?product=outreach&company_id=${
@@ -75,7 +84,6 @@ const AppContext = ({ children }) => {
         }
       );
       const users = data.results.data;
-
       setSelectUsers(users);
     } catch (error) {
       console.log(error.message);
@@ -83,20 +91,14 @@ const AppContext = ({ children }) => {
   }
 
   // createTask
-  const createTask = async () => {
+  const createTask = async (body) => {
+    // console.log(body);
     try {
       const res = await axios.post(
         `https://stage.api.sloovi.com/task/lead_65b171d46f3945549e3baa997e3fc4c2?company_id=${
           import.meta.env.VITE_COMPANY_ID
         }`,
-        {
-          assigned_user: "user_8c2ff2128e70493fa4cedd2cab97c492",
-          task_date: "2023-12-01",
-          task_time: 5500,
-          is_completed: 0,
-          time_zone: 19800,
-          task_msg: "checking123 John",
-        },
+        body,
         {
           headers: {
             Authorization: `Bearer  ${import.meta.env.VITE_ACCESS_TOKEN}`,
@@ -105,35 +107,38 @@ const AppContext = ({ children }) => {
           },
         }
       );
-      console.log(res);
+      // console.log(res);
+      toast.success("Task Created");
       getAllTask();
     } catch (error) {
       console.log(error.message);
+      toast.error(error.message);
     }
   };
 
   // update existing task
   const updateTask = async (id, body) => {
     try {
-      const res = await axios.put(updateURL(id), body, {
+      await axios.put(updateURL(id), body, {
         headers: {
           Authorization: `Bearer ${import.meta.env.VITE_ACCESS_TOKEN}`,
           Accept: "application/json",
           "Content-Type": "application/json",
         },
       });
-      console.log(res);
+      // console.log(res);
+      toast.success("Task Updated");
       getAllTask();
     } catch (error) {
       console.log(error.message);
+      toast.error("error.message");
     }
   };
 
   // delete task
   const deleteTask = async (id) => {
-    console.log(id);
     try {
-      const res = await axios.delete(
+      await axios.delete(
         ` https://stage.api.sloovi.com/task/lead_65b171d46f3945549e3baa997e3fc4c2/${id}?company_id=${
           import.meta.env.VITE_COMPANY_ID
         }`,
@@ -147,14 +152,34 @@ const AppContext = ({ children }) => {
         }
       );
       getAllTask();
-      console.log(res);
+      // console.log(res);
+      toast.success("Task Deleted");
     } catch (error) {
       console.log(error);
+      toast.error(error.message);
     }
   };
 
+  //Getting Access Token, Company_id, User_id
+  // const fetchdata = async () => {
+  //   const { data } = await axios.post(
+  //     "https://stage.api.sloovi.com/login?product=outreach",
+  //     {
+  //       email: "smithwilXXXXX89@gmail.com",
+  //       password: "*********",
+  //     },
+  //     {
+  //       headers: {
+  //         Accept: "application/json",
+  //         "Content-Type": "application/json",
+  //       },
+  //     }
+  //   );
+  //   console.log(data);
+  // };
+
   useEffect(() => {
-    fetchData();
+    fetchSelectUsers();
     getAllTask();
   }, []);
   return (

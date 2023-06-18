@@ -2,13 +2,14 @@ import styled from "styled-components";
 import { useGlobalContext } from "./Context";
 import TaskEditor from "./components/TaskEditor";
 import TaskAdd from "./components/Taskadd";
+import { ToastContainer } from "react-toastify";
 
 function App() {
   // const { data } = useGlobalContext();
   // console.log(data);
   return (
     <>
-      <nav></nav>
+      <ToastContainer position="bottom-center"></ToastContainer>
       <Wrapper>
         <TaskAdd />
       </Wrapper>
