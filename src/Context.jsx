@@ -7,7 +7,7 @@ import {
   TASK_LOADING,
   TASK_LOADING_SUCCESS,
 } from "./actions";
-import { deleteURL, updateURL } from "./helper/data";
+import { TaskURL, URL } from "./helper/data";
 import { toast } from "react-toastify";
 
 const GlobalContext = createContext();
@@ -48,18 +48,13 @@ const AppContext = ({ children }) => {
   const getAllTask = async () => {
     dispatch({ type: TASK_LOADING });
     try {
-      const { data } = await axios(
-        `https://stage.api.sloovi.com/task/lead_65b171d46f3945549e3baa997e3fc4c2?company_id=${
-          import.meta.env.VITE_COMPANY_ID
-        }`,
-        {
-          headers: {
-            Authorization: `Bearer ${import.meta.env.VITE_ACCESS_TOKEN}`,
-            Accept: "application/json",
-            "Content-Type": "application/json",
-          },
-        }
-      );
+      const { data } = await axios(TaskURL(), {
+        headers: {
+          Authorization: `Bearer ${import.meta.env.VITE_ACCESS_TOKEN}`,
+          Accept: "application/json",
+          "Content-Type": "application/json",
+        },
+      });
 
       const task = data.results;
       // console.log(task);
@@ -94,19 +89,13 @@ const AppContext = ({ children }) => {
   const createTask = async (body) => {
     // console.log(body);
     try {
-      const res = await axios.post(
-        `https://stage.api.sloovi.com/task/lead_65b171d46f3945549e3baa997e3fc4c2?company_id=${
-          import.meta.env.VITE_COMPANY_ID
-        }`,
-        body,
-        {
-          headers: {
-            Authorization: `Bearer  ${import.meta.env.VITE_ACCESS_TOKEN}`,
-            Accept: "application/json",
-            "Content-Type": "application/json",
-          },
-        }
-      );
+      await axios.post(TaskURL(), body, {
+        headers: {
+          Authorization: `Bearer  ${import.meta.env.VITE_ACCESS_TOKEN}`,
+          Accept: "application/json",
+          "Content-Type": "application/json",
+        },
+      });
       // console.log(res);
       toast.success("Task Created");
       getAllTask();
@@ -119,7 +108,7 @@ const AppContext = ({ children }) => {
   // update existing task
   const updateTask = async (id, body) => {
     try {
-      await axios.put(updateURL(id), body, {
+      await axios.put(URL(id), body, {
         headers: {
           Authorization: `Bearer ${import.meta.env.VITE_ACCESS_TOKEN}`,
           Accept: "application/json",
@@ -138,19 +127,13 @@ const AppContext = ({ children }) => {
   // delete task
   const deleteTask = async (id) => {
     try {
-      await axios.delete(
-        ` https://stage.api.sloovi.com/task/lead_65b171d46f3945549e3baa997e3fc4c2/${id}?company_id=${
-          import.meta.env.VITE_COMPANY_ID
-        }`,
-
-        {
-          headers: {
-            Authorization: `Bearer ${import.meta.env.VITE_ACCESS_TOKEN}`,
-            Accept: "application/json",
-            "Content-Type": "application/json",
-          },
-        }
-      );
+      await axios.delete(URL(id), {
+        headers: {
+          Authorization: `Bearer ${import.meta.env.VITE_ACCESS_TOKEN}`,
+          Accept: "application/json",
+          "Content-Type": "application/json",
+        },
+      });
       getAllTask();
       // console.log(res);
       toast.success("Task Deleted");
