@@ -5,7 +5,6 @@ import { useGlobalContext } from "../Context";
 import { hoursToSeconds, stringDate } from "../helper/helper";
 import { MdDelete, MdDone } from "react-icons/md";
 import { SlCalender } from "react-icons/sl";
-import CustomDatePicker from "./CustomDatePicker";
 import { Calendar } from "react-date-range";
 import format from "date-fns/format";
 
@@ -20,9 +19,6 @@ function TaskEditor({ id, deleteIcon, setTaskOpen }) {
     time_zone: 19800,
     task_msg: "",
   });
-  useEffect(() => {
-    console.log(formData);
-  }, [formData]);
 
   const [selectUser, setSelectUser] = useState("Arun Karthik");
   const [dropDown, setDropDown] = useState(false);
@@ -90,11 +86,8 @@ function TaskEditor({ id, deleteIcon, setTaskOpen }) {
         time_zone,
         task_msg,
       };
-      // console.log(currentTaskDetails);
       if (deleteIcon) {
         setFormData(currentTaskDetails);
-        // console.log(currentTaskDetails);
-        // setSelectUser(users.name);
       }
     } catch (err) {
       console.log(err.message);
@@ -155,15 +148,7 @@ function TaskEditor({ id, deleteIcon, setTaskOpen }) {
           <span>
             <label htmlFor="">Date</label>
             <br />
-            {/* <input
-              name="task_date"
-              value={formData.task_date}
-              onChange={updateFormData}
-              className="sd"
-              type="date"
-            /> */}
             <div className="date1 flex-center">
-              {/* <p> {"06/3/2023"}</p> */}
               {/* <CustomDatePicker /> */}
               <CalenderWrapper className="calendarWrap">
                 <div
@@ -180,11 +165,10 @@ function TaskEditor({ id, deleteIcon, setTaskOpen }) {
                 </div>
 
                 <div ref={refOne}>
-                  {console.log(new Date(stringDate(formData.task_date)))}
+                  {/* {console.log(new Date(stringDate(formData.task_date)))} */}
                   {open && (
                     <Calendar
-                      date={new Date()}
-                      // shownDate={new Date(stringDate(formData.task_date))}
+                      shownDate={new Date(stringDate(formData.task_date))}
                       onChange={handleSelect}
                       className="calendarElement"
                     />
