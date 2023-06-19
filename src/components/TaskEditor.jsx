@@ -1,13 +1,17 @@
 import axios from "axios";
-import { useEffect, useState } from "react";
+import { useEffect, useRef, useState } from "react";
 import styled from "styled-components";
 import { useGlobalContext } from "../Context";
-import { hoursToSeconds } from "../helper/helper";
-import { MdDelete } from "react-icons/md";
-import { FcCalendar } from "react-icons/fc";
+import { hoursToSeconds, stringDate } from "../helper/helper";
+import { MdDelete, MdDone } from "react-icons/md";
+import { SlCalender } from "react-icons/sl";
+import CustomDatePicker from "./CustomDatePicker";
+import { Calendar } from "react-date-range";
+import format from "date-fns/format";
 
 function TaskEditor({ id, deleteIcon, setTaskOpen }) {
   const { createTask, updateTask, deleteTask, users } = useGlobalContext();
+
   const [formData, setFormData] = useState({
     assigned_user: "user_8c2ff2128e70493fa4cedd2cab97c492",
     task_date: "2023-06-15",
@@ -16,6 +20,44 @@ function TaskEditor({ id, deleteIcon, setTaskOpen }) {
     time_zone: 19800,
     task_msg: "",
   });
+  useEffect(() => {
+    console.log(formData);
+  }, [formData]);
+
+  const [selectUser, setSelectUser] = useState("Arun Karthik");
+  const [dropDown, setDropDown] = useState(false);
+  const [calendar, setCalendar] = useState("2023/06/10");
+  const [open, setOpen] = useState(false);
+  const refOne = useRef(null);
+
+  const hideOnEscape = (e) => {
+    // console.log(e.key)
+    if (e.key === "Escape") {
+      setOpen(false);
+    }
+  };
+
+  const handleSelect = (date) => {
+    // console.log(format(date, "yyyy/MM/dd"));
+    let stringdate = stringDate(format(date, "yyyy/MM/dd"), true);
+
+    setFormData({ ...formData, task_date: stringdate });
+    setCalendar(format(date, "yyyy/MM/dd"));
+  };
+
+  const hideOnClickOutside = (e) => {
+    if (refOne.current && !refOne.current.contains(e.target)) {
+      setOpen(false);
+    }
+  };
+
+  useEffect(() => {
+    // set current date on component load
+    setCalendar(format(new Date(), "yyyy/MM/dd"));
+    // event listeners
+    document.addEventListener("keydown", hideOnEscape, true);
+    document.addEventListener("click", hideOnClickOutside, true);
+  }, []);
 
   //get a single task
   const getSingleTask = async (id) => {
@@ -51,6 +93,8 @@ function TaskEditor({ id, deleteIcon, setTaskOpen }) {
       // console.log(currentTaskDetails);
       if (deleteIcon) {
         setFormData(currentTaskDetails);
+        // console.log(currentTaskDetails);
+        // setSelectUser(users.name);
       }
     } catch (err) {
       console.log(err.message);
@@ -63,7 +107,11 @@ function TaskEditor({ id, deleteIcon, setTaskOpen }) {
 
   // update local Task(from) details
   const updateFormData = (e) => {
-    if (e.target.name === "task_time") {
+    if (e?.target?.dataset?.user) {
+      console.log(e.target.dataset.user);
+      return;
+    }
+    if (e?.target?.name === "task_time") {
       setFormData({ ...formData, [e.target.name]: Number(e.target.value) });
       return;
     }
@@ -77,6 +125,8 @@ function TaskEditor({ id, deleteIcon, setTaskOpen }) {
     }`;
   });
 
+  // update select user
+
   return (
     <Wrapper>
       <form
@@ -84,7 +134,7 @@ function TaskEditor({ id, deleteIcon, setTaskOpen }) {
           console.log(id);
           e.preventDefault();
           {
-            deleteIcon ? updateTask(id, formData) : createTask(formData),
+            id ? updateTask(id, formData) : createTask(formData),
               setTaskOpen(false);
           }
         }}
@@ -105,20 +155,45 @@ function TaskEditor({ id, deleteIcon, setTaskOpen }) {
           <span>
             <label htmlFor="">Date</label>
             <br />
-            <div className="sd-container">
-              <input
-                name="task_date"
-                value={formData.task_date}
-                onChange={updateFormData}
-                className="sd"
-                type="date"
-              />
-              <span className="open-button">
-                <button type="button">
-                  <FcCalendar />
-                </button>
-              </span>
+            {/* <input
+              name="task_date"
+              value={formData.task_date}
+              onChange={updateFormData}
+              className="sd"
+              type="date"
+            /> */}
+            <div className="date1 flex-center">
+              {/* <p> {"06/3/2023"}</p> */}
+              {/* <CustomDatePicker /> */}
+              <CalenderWrapper className="calendarWrap">
+                <div
+                  className="d-flex flex-center"
+                  onClick={() => setOpen((open) => !open)}
+                >
+                  <SlCalender />
+                  <input
+                    name="task_date"
+                    value={formData.task_date}
+                    readOnly
+                    className="inputBox"
+                  />
+                </div>
+
+                <div ref={refOne}>
+                  {console.log(new Date(stringDate(formData.task_date)))}
+                  {open && (
+                    <Calendar
+                      date={new Date()}
+                      // shownDate={new Date(stringDate(formData.task_date))}
+                      onChange={handleSelect}
+                      className="calendarElement"
+                    />
+                  )}
+                </div>
+              </CalenderWrapper>
             </div>
+
+            {/* </div> */}
           </span>
 
           <span className="time">
@@ -157,20 +232,51 @@ function TaskEditor({ id, deleteIcon, setTaskOpen }) {
           </span>
         </div>
         <label>Assign user</label>
-        <select
-          className="user"
-          value={formData.assigned_user}
-          name="assigned_user"
-          onChange={updateFormData}
-        >
+
+        <div className="dropdown-menu" onClick={() => setDropDown(!dropDown)}>
           {users.map((user) => {
             return (
-              <option key={user.id} value={user.id}>
-                {user.name}
-              </option>
+              <p key={user.id}>
+                {user.id === formData.assigned_user && user.name}
+              </p>
             );
           })}
-        </select>
+          {/* <p> {selectUser}</p> */}
+          <div className={dropDown ? "enclose" : "enclose hide"}>
+            {users.map((user) => {
+              // console.log(user.id);
+              return (
+                <div className="dropdown-container" key={user.id}>
+                  <p
+                    onClick={(e) => {
+                      setSelectUser(e.target.dataset.user);
+                      setFormData({ ...formData, assigned_user: user.id });
+                    }}
+                    data-user={user.name}
+                    className={`dropdown-item d-flex `}
+                    style={{
+                      background:
+                        formData.assigned_user === user.id
+                          ? "#cdcdcd44"
+                          : "#fff",
+                    }}
+                  >
+                    <MdDone
+                      data-user={user.name}
+                      className={
+                        formData.assigned_user === user.id
+                          ? "mark"
+                          : "mark invisible"
+                      }
+                    />
+                    {user.name}
+                  </p>
+                </div>
+              );
+            })}
+          </div>
+        </div>
+        {/* </select> */}
         <div
           className="btn-container flex-center "
           style={{ justifyContent: deleteIcon ? "space-between" : "end" }}
@@ -229,49 +335,18 @@ const Wrapper = styled.div`
         margin-top: 5px;
       }
 
-      .sd-container {
-        position: relative;
-        float: left;
+      .date1 {
+        background-color: #ffffff;
+        height: 100%;
         width: 100%;
-      }
-
-      .sd {
-        padding: 5px 10px;
-        height: 30px;
-      }
-
-      .open-button {
-        position: absolute;
-        top: 7px;
-        right: 4px;
-        width: 25px;
-        height: 25px;
-        background-color: #fff;
-        pointer-events: none;
-      }
-
-      .open-button button {
-        border: none;
-        background: transparent;
+        justify-content: start;
+        gap: 1rem;
+        height: 2rem;
+        margin-top: 5px;
       }
     }
   }
-  select.user {
-    width: 100%;
-    padding: 5px 0.625rem;
-    margin-top: 0.625rem;
-    outline: none;
-    border: 1px solid var(--clr-grey-50);
-    -webkit-appearance: none;
-    -moz-appearance: none;
-    appearance: none;
-    background: url("data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAABoAAAAkCAYAAACXOioTAAAAAXNSR0IArs4c6QAAAZhJREFUSEvtlk3LgkAUhY99Uv0+F7mIitonEhSBlX1QQf8gBCEIN/63iAiJ8OUOBC/lOHdctPKCIDhzHufMmcsYSZIk+EEZBSivy4V1eZ1DLuvoRBiGoQXVAsVxjMvlgkqlgna7jXK5zIaxQQRZr9fYbDao1WrifTQaCSinWKDn84ntdovVaoXX6yV0q9UqPM+Dbduo1+tKlhJEwrvdDsvlEgT8X2TdYrGA4zhoNBqZsEwQbfrhcMB8PgdZl1YUCtd1MR6P0Wq1pLBM0PF4FJD7/a60ZjabYTqdSmFSUBRF6Pf7uF6vSggNoJWdTid0u12USqWvOVJQGIYYDoe43W5fk0iI0vZ+KBjNZlPYbJpmauyloMfjISC04SRIYm/htD9WLVuZOpUA93sB4jrFT935fMZgMJAe1E8lakO+78OyrPSDLbucBEEgzoRO0ZxOp6MHotH7/R6TyYTFop5HXURWytRxYCqI6Byce10WjANhg2Q2ciFaoE+YDkQbRBMowtSpe70eKyTvQaw90lKUDC5AuV0srMtt3R88bhakXJJLzwAAAABJRU5ErkJggg==");
-    /* background: url("https://img.icons8.com/?size=512&id=41198&format=png"); */
-    background-repeat: no-repeat;
-    background-position: right 15px center;
-    background-size: 1rem;
-    background-color: #fff;
-  }
+
   .time {
     select {
       width: 100%;
@@ -287,6 +362,7 @@ const Wrapper = styled.div`
       background-repeat: no-repeat;
       background-position: left 7px center;
       background-size: 1rem;
+      cursor: pointer;
     }
   }
 
@@ -305,5 +381,94 @@ const Wrapper = styled.div`
         background-color: #1a69b7;
       }
     }
+  }
+
+  .dropdown-menu {
+    width: 100%;
+    height: 2rem;
+    background-color: #ffffff;
+    margin-top: 0.7rem;
+    position: relative;
+    align-items: center;
+    cursor: pointer;
+    > p {
+      padding-left: 1rem;
+      padding-top: 2px;
+    }
+    ::after {
+      content: "";
+      background: url("data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAABoAAAAkCAYAAACXOioTAAAAAXNSR0IArs4c6QAAAZhJREFUSEvtlk3LgkAUhY99Uv0+F7mIitonEhSBlX1QQf8gBCEIN/63iAiJ8OUOBC/lOHdctPKCIDhzHufMmcsYSZIk+EEZBSivy4V1eZ1DLuvoRBiGoQXVAsVxjMvlgkqlgna7jXK5zIaxQQRZr9fYbDao1WrifTQaCSinWKDn84ntdovVaoXX6yV0q9UqPM+Dbduo1+tKlhJEwrvdDsvlEgT8X2TdYrGA4zhoNBqZsEwQbfrhcMB8PgdZl1YUCtd1MR6P0Wq1pLBM0PF4FJD7/a60ZjabYTqdSmFSUBRF6Pf7uF6vSggNoJWdTid0u12USqWvOVJQGIYYDoe43W5fk0iI0vZ+KBjNZlPYbJpmauyloMfjISC04SRIYm/htD9WLVuZOpUA93sB4jrFT935fMZgMJAe1E8lakO+78OyrPSDLbucBEEgzoRO0ZxOp6MHotH7/R6TyYTFop5HXURWytRxYCqI6Byce10WjANhg2Q2ciFaoE+YDkQbRBMowtSpe70eKyTvQaw90lKUDC5AuV0srMtt3R88bhakXJJLzwAAAABJRU5ErkJggg==")
+        no-repeat;
+      position: absolute;
+      background-repeat: no-repeat;
+      background-position: right 5px center;
+      background-size: 1rem;
+      top: 0;
+      height: 100%;
+      width: 100%;
+    }
+    .mark {
+      color: dodgerblue;
+      font-size: 1.3rem;
+    }
+    .enclose {
+      box-shadow: 0 3px 10px #c5c5c5;
+      position: relative;
+      top: 0.5rem;
+      width: 100%;
+    }
+    .dropdown-container {
+      display: block;
+      background-color: #ffffff;
+    }
+    .dropdown-item {
+      align-items: center;
+      height: 2rem;
+      gap: 1rem;
+      padding-left: 1rem;
+      z-index: 10;
+      cursor: pointer;
+      :hover {
+        background-color: #9a9a9a44;
+      }
+    }
+  }
+  .hide {
+    display: none;
+  }
+  .invisible {
+    visibility: hidden;
+    opacity: 0;
+  }
+`;
+
+const CalenderWrapper = styled.div`
+  display: inline-block;
+  position: relative;
+  cursor: pointer;
+  /* overflow: scroll; */
+
+  .d-flex {
+    padding-left: 1rem;
+  }
+  .inputBox {
+    border: none;
+    outline: none;
+    cursor: pointer;
+  }
+  input.inputBox {
+    width: 100px;
+    border-radius: 3px;
+    /* border: 1px solid #666; */
+  }
+
+  .calendarElement {
+    position: absolute;
+    left: 81%;
+    transform: translateX(-50%);
+    top: 40px;
+    border: 1px solid #ccc;
+    z-index: 999;
+    min-height: 100px;
   }
 `;

@@ -45,7 +45,7 @@ const TaskAdd = () => {
 export default TaskAdd;
 const Wrapper = styled.div`
   > div:first-child {
-    margin-bottom: 3rem;
+    margin-bottom: 1rem;
     p {
       color: dodgerblue;
     }
@@ -87,7 +87,7 @@ const GridWrapper = styled.div`
   /* grid-template-rows: 1fr 5fr; */
   nav {
     grid-column: 2/3;
-    margin-bottom: 1rem;
+    /* margin-bottom: 1rem; */
   }
   .aside {
     grid-row: 1/3;

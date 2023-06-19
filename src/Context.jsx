@@ -57,7 +57,7 @@ const AppContext = ({ children }) => {
       });
 
       const task = data.results;
-      // console.log(task);
+      console.log(task);
       dispatch({ type: TASK_LOADING_SUCCESS });
       setAllTask(task);
     } catch (error) {
@@ -87,7 +87,7 @@ const AppContext = ({ children }) => {
 
   // createTask
   const createTask = async (body) => {
-    // console.log(body);
+    console.log(body);
     try {
       await axios.post(TaskURL(), body, {
         headers: {
