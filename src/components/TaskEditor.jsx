@@ -124,7 +124,7 @@ function TaskEditor({ id, deleteIcon, setTaskOpen }) {
     <Wrapper style={{ height: open ? "470px" : "" }}>
       <form
         onSubmit={(e) => {
-          console.log(id);
+          // console.log(id);
           e.preventDefault();
           {
             id ? updateTask(id, formData) : createTask(formData),
