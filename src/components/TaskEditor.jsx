@@ -293,7 +293,7 @@ export default TaskEditor;
 const Wrapper = styled.div`
   background-color: var(--clr-bg-1);
   padding: 0.625rem;
-
+  /* height: 500px; */
   input {
     border: 1px solid var(--clr-grey-50);
     border-radius: 2px;
@@ -447,12 +447,14 @@ const CalenderWrapper = styled.div`
   }
 
   .calendarElement {
+    /* background-color: red; */
     position: absolute;
-    left: 81%;
+    left: 85%;
     transform: translateX(-50%);
     top: 40px;
     border: 1px solid #ccc;
     z-index: 999;
-    min-height: 100px;
+    /* min-height: 100px; */
+    /* height: ; */
   }
 `;

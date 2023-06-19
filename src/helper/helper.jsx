@@ -5,7 +5,7 @@ export function hoursToSeconds(arr) {
 
 export function stringDate(date, def) {
   if (def) {
-    return `${date.slice(0, 4)}-${date.slice(5, 6) + 1}-${date.slice(8)}`;
+    return `${date.slice(0, 4)}-${date.slice(5, 7)}-${date.slice(8)}`;
   }
-  return `${date.slice(0, 4)},${date.slice(5, 6) + 1},${date.slice(8)}`;
+  return `${date.slice(0, 4)},${date.slice(5, 7)},${date.slice(8)}`;
 }

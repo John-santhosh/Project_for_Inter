@@ -57,7 +57,6 @@ const AppContext = ({ children }) => {
       });
 
       const task = data.results;
-      console.log(task);
       dispatch({ type: TASK_LOADING_SUCCESS });
       setAllTask(task);
     } catch (error) {
