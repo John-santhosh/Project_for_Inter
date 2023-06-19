@@ -121,7 +121,7 @@ function TaskEditor({ id, deleteIcon, setTaskOpen }) {
   // update select user
 
   return (
-    <Wrapper>
+    <Wrapper style={{ height: open ? "470px" : "" }}>
       <form
         onSubmit={(e) => {
           console.log(id);
@@ -430,7 +430,6 @@ const CalenderWrapper = styled.div`
   display: inline-block;
   position: relative;
   cursor: pointer;
-  /* overflow: scroll; */
 
   .d-flex {
     padding-left: 1rem;
@@ -443,18 +442,14 @@ const CalenderWrapper = styled.div`
   input.inputBox {
     width: 100px;
     border-radius: 3px;
-    /* border: 1px solid #666; */
   }
 
   .calendarElement {
-    /* background-color: red; */
     position: absolute;
     left: 85%;
     transform: translateX(-50%);
     top: 40px;
     border: 1px solid #ccc;
     z-index: 999;
-    /* min-height: 100px; */
-    /* height: ; */
   }
 `;
