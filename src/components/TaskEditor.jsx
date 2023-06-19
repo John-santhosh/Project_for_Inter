@@ -10,10 +10,10 @@ import format from "date-fns/format";
 
 function TaskEditor({ id, deleteIcon, setTaskOpen }) {
   const { createTask, updateTask, deleteTask, users } = useGlobalContext();
-
+  const today = stringDate(format(new Date(), "yyyy/MM/dd"), true);
   const [formData, setFormData] = useState({
     assigned_user: "user_8c2ff2128e70493fa4cedd2cab97c492",
-    task_date: "2023-06-15",
+    task_date: today,
     task_time: 0,
     is_completed: 0,
     time_zone: 19800,
@@ -38,7 +38,7 @@ function TaskEditor({ id, deleteIcon, setTaskOpen }) {
     let stringdate = stringDate(format(date, "yyyy/MM/dd"), true);
 
     setFormData({ ...formData, task_date: stringdate });
-    setCalendar(format(date, "yyyy/MM/dd"));
+    // setCalendar(format(date, "yyyy/MM/dd"));
   };
 
   const hideOnClickOutside = (e) => {
@@ -49,7 +49,7 @@ function TaskEditor({ id, deleteIcon, setTaskOpen }) {
 
   useEffect(() => {
     // set current date on component load
-    setCalendar(format(new Date(), "yyyy/MM/dd"));
+    // setCalendar(format(new Date(), "yyyy/MM/dd"));
     // event listeners
     document.addEventListener("keydown", hideOnEscape, true);
     document.addEventListener("click", hideOnClickOutside, true);
@@ -132,6 +132,7 @@ function TaskEditor({ id, deleteIcon, setTaskOpen }) {
           }
         }}
       >
+        {/* task description */}
         <div>
           <label>Task Description</label>
           <br />
@@ -144,6 +145,8 @@ function TaskEditor({ id, deleteIcon, setTaskOpen }) {
             onChange={updateFormData}
           />
         </div>
+
+        {/* select date */}
         <div className="date flex-center">
           <span>
             <label htmlFor="">Date</label>
@@ -215,8 +218,9 @@ function TaskEditor({ id, deleteIcon, setTaskOpen }) {
             </select>
           </span>
         </div>
-        <label>Assign user</label>
 
+        {/* user select dropdown */}
+        <label>Assign user</label>
         <div className="dropdown-menu" onClick={() => setDropDown(!dropDown)}>
           {users.map((user) => {
             return (
@@ -260,7 +264,8 @@ function TaskEditor({ id, deleteIcon, setTaskOpen }) {
             })}
           </div>
         </div>
-        {/* </select> */}
+
+        {/* action buttons */}
         <div
           className="btn-container flex-center "
           style={{ justifyContent: deleteIcon ? "space-between" : "end" }}
