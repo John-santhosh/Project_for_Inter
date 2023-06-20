@@ -33,7 +33,7 @@ function TaskEditor({ id, deleteIcon, setTaskOpen }) {
   };
 
   const handleSelect = (date) => {
-    console.log(date);
+    // console.log(date);
     setDate(date);
     let stringdate = stringDate(format(date, "yyyy/MM/dd"), true);
 
@@ -137,6 +137,7 @@ function TaskEditor({ id, deleteIcon, setTaskOpen }) {
           <label>Task Description</label>
           <br />
           <input
+            className="task_desc"
             type="text"
             placeholder="Task"
             name="task_msg"
@@ -161,7 +162,7 @@ function TaskEditor({ id, deleteIcon, setTaskOpen }) {
                   <SlCalender />
                   <input
                     name="task_date"
-                    value={formData.task_date}
+                    value={stringDate(formData.task_date, "forward")}
                     readOnly
                     className="inputBox"
                   />
@@ -298,12 +299,14 @@ export default TaskEditor;
 const Wrapper = styled.div`
   background-color: var(--clr-bg-1);
   padding: 0.625rem;
-  /* height: 500px; */
+  .task_desc {
+    height: 2rem;
+  }
   input {
     border: 1px solid var(--clr-grey-50);
     border-radius: 2px;
     padding: 5px 0.625rem;
-    margin-top: 0.625rem;
+    margin-top: 0.5rem;
     width: 100%;
   }
 
@@ -311,6 +314,7 @@ const Wrapper = styled.div`
   .date {
     justify-content: space-between;
     margin: 0.625rem 0;
+    margin-bottom: 1rem;
 
     > span {
       width: 45%;
@@ -341,10 +345,11 @@ const Wrapper = styled.div`
   .time {
     select {
       width: 100%;
+      outline: none;
       font-size: 1rem;
       padding-left: 3rem;
       border: 1px solid var(--clr-grey-50);
-      height: 2.2rem;
+      height: 2rem;
       margin-top: 5px;
       background-color: #fff;
       /** for the dropdown indicator */
@@ -359,7 +364,9 @@ const Wrapper = styled.div`
 
   /* buttons */
   .btn-container {
-    margin: 0.625rem 0;
+    /* margin: 1rem 0; */
+    margin-top: 1.5rem;
+    margin-bottom: 0.9rem;
 
     .saveBtn {
       background-color: dodgerblue;
@@ -380,7 +387,7 @@ const Wrapper = styled.div`
     background-color: #ffffff;
     border: 1px solid var(--clr-grey-50);
 
-    margin-top: 0.7rem;
+    margin-top: 0.5rem;
     position: relative;
     align-items: center;
     cursor: pointer;
@@ -397,7 +404,7 @@ const Wrapper = styled.div`
       background-position: right 5px center;
       background-size: 1rem;
       top: 0;
-      height: 100%;
+      height: 2rem;
       width: 100%;
     }
     .mark {

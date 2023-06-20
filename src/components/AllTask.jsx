@@ -5,12 +5,14 @@ import { HiPencil } from "react-icons/hi";
 import { HiBellSnooze } from "react-icons/hi2";
 import { MdDone } from "react-icons/md";
 import TaskEditor from "./TaskEditor";
+import { stringDate } from "../helper/helper";
 
 const AllTask = ({ id, task_msg, task_date, is_completed }) => {
   const [taskOpen, setTaskOpen] = useState(false);
   const { allTask, updateTask } = useGlobalContext();
   const currentTask = allTask.find((task) => task.id === id);
-  // console.log(allTask);
+  new Date(stringDate(task_date, "forward")) <= new Date();
+  console.log();
   return (
     <Wrapper>
       <div>
@@ -21,7 +23,17 @@ const AllTask = ({ id, task_msg, task_date, is_completed }) => {
                 <div className="img"></div>
                 <span>
                   <p className="taskMsg">{task_msg}</p>
-                  <p className="taskDate">{task_date}</p>
+                  <p
+                    className="taskDate"
+                    style={{
+                      color:
+                        new Date(stringDate(task_date, "forward")) <= new Date()
+                          ? "red"
+                          : "black",
+                    }}
+                  >
+                    {stringDate(task_date, "forward")}
+                  </p>
                 </span>
               </div>
               <div className="btn-container">

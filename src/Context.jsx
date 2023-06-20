@@ -125,6 +125,8 @@ const AppContext = ({ children }) => {
 
   // delete task
   const deleteTask = async (id) => {
+    let deleteConfirm = confirm("Are you sure you want to delete this Task?");
+    if (!deleteConfirm) return;
     try {
       await axios.delete(URL(id), {
         headers: {
