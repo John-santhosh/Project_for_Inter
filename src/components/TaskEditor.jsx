@@ -20,9 +20,7 @@ function TaskEditor({ id, deleteIcon, setTaskOpen }) {
     task_msg: "",
   });
 
-  const [selectUser, setSelectUser] = useState("Arun Karthik");
   const [dropDown, setDropDown] = useState(false);
-  const [calendar, setCalendar] = useState("2023/06/10");
   const [open, setOpen] = useState(false);
   const refOne = useRef(null);
 
@@ -236,8 +234,7 @@ function TaskEditor({ id, deleteIcon, setTaskOpen }) {
               return (
                 <div className="dropdown-container" key={user.id}>
                   <p
-                    onClick={(e) => {
-                      setSelectUser(e.target.dataset.user);
+                    onClick={() => {
                       setFormData({ ...formData, assigned_user: user.id });
                     }}
                     data-user={user.name}
@@ -340,7 +337,7 @@ const Wrapper = styled.div`
     select {
       width: 100%;
       font-size: 1rem;
-      padding-left: 2.5rem;
+      padding-left: 3rem;
       border: 1px solid var(--clr-grey-50);
       height: 2.2rem;
       margin-top: 5px;
@@ -349,7 +346,7 @@ const Wrapper = styled.div`
       appearance: none;
       background-image: url("https://img.icons8.com/?size=512&id=3160&format=png");
       background-repeat: no-repeat;
-      background-position: left 7px center;
+      background-position: left 1rem center;
       background-size: 1rem;
       cursor: pointer;
     }
@@ -438,6 +435,7 @@ const CalenderWrapper = styled.div`
 
   .d-flex {
     padding-left: 1rem;
+    gap: 0.5rem;
   }
   .inputBox {
     border: none;
@@ -447,6 +445,7 @@ const CalenderWrapper = styled.div`
   input.inputBox {
     width: 100px;
     border-radius: 3px;
+    font-size: 1rem;
   }
 
   .calendarElement {
