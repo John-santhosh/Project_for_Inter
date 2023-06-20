@@ -68,7 +68,7 @@ const Wrapper = styled.div`
     }
   }
   > div {
-    border-radius: 5px;
+    /* border-radius: 5px; */
     width: 450px;
   }
   .heading {
