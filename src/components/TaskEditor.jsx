@@ -2,7 +2,7 @@ import axios from "axios";
 import { useEffect, useRef, useState } from "react";
 import styled from "styled-components";
 import { useGlobalContext } from "../Context";
-import { hoursToSeconds, stringDate } from "../helper/helper";
+import { displayTime, hoursToSeconds, stringDate } from "../helper/helper";
 import { MdDelete, MdDone } from "react-icons/md";
 import { SlCalender } from "react-icons/sl";
 import { Calendar } from "react-date-range";
@@ -162,7 +162,7 @@ function TaskEditor({ id, deleteIcon, setTaskOpen }) {
                   <SlCalender />
                   <input
                     name="task_date"
-                    value={stringDate(formData.task_date, "forward")}
+                    value={displayTime(formData.task_date)}
                     readOnly
                     className="inputBox"
                   />

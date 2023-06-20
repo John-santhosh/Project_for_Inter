@@ -1,17 +1,16 @@
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { useGlobalContext } from "../Context";
 import styled from "styled-components";
 import { HiPencil } from "react-icons/hi";
 import { HiBellSnooze } from "react-icons/hi2";
 import { MdDone } from "react-icons/md";
 import TaskEditor from "./TaskEditor";
-import { stringDate } from "../helper/helper";
+import { displayTime, stringDate } from "../helper/helper";
 
 const AllTask = ({ id, task_msg, task_date, is_completed }) => {
   const [taskOpen, setTaskOpen] = useState(false);
   const { allTask, updateTask } = useGlobalContext();
   const currentTask = allTask.find((task) => task.id === id);
-  new Date(stringDate(task_date, "forward")) <= new Date();
   console.log();
   return (
     <Wrapper>
@@ -32,7 +31,7 @@ const AllTask = ({ id, task_msg, task_date, is_completed }) => {
                           : "black",
                     }}
                   >
-                    {stringDate(task_date, "forward")}
+                    {displayTime(task_date, "forward")}
                   </p>
                 </span>
               </div>
