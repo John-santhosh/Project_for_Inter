@@ -299,6 +299,7 @@ export default TaskEditor;
 const Wrapper = styled.div`
   background-color: var(--clr-bg-1);
   padding: 0.625rem;
+  border-top: 1px solid var(--clr-grey-50);
   .task_desc {
     height: 2rem;
   }

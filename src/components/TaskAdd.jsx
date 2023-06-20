@@ -56,7 +56,7 @@ const Wrapper = styled.div`
   }
   .addTask {
     background-color: #a9a9a918;
-    border-bottom: 1px solid var(--clr-grey-50);
+    /* border-bottom: 1px solid var(--clr-grey-50); */
     padding-left: 10px;
     height: 2.5rem;
     justify-content: space-between;
