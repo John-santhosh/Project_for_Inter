@@ -13,7 +13,7 @@ const AllTask = ({ id, task_msg, task_date, is_completed }) => {
   const currentTask = allTask.find((task) => task.id === id);
   console.log();
   return (
-    <Wrapper>
+    <Wrapper className="lastChild">
       <div>
         <div>
           {!taskOpen ? (
@@ -94,7 +94,7 @@ const Wrapper = styled.div`
 
   div.flex-between {
     padding: 10px 1rem;
-    border: 1px solid var(--clr-grey-50);
+    /* border: 1px solid var(--clr-grey-50); */
     > div.flex-center {
       gap: 0.5rem;
     }

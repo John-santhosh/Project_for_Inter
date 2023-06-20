@@ -54,6 +54,16 @@ const Wrapper = styled.div`
       font-size: 0.8rem;
     }
   }
+  div.lastChild:last-child {
+    border-radius: 0 0 3px 3px;
+    /* border: 1px solid var(--clr-grey-50); */
+    /* overflow: hidden; */
+  }
+  div.lastChild {
+    /* border-radius: 0 0 3px 3px; */
+    border: 1px solid var(--clr-grey-50);
+    /* overflow: hidden; */
+  }
   .addTask {
     background-color: #a9a9a918;
     /* border-bottom: 1px solid var(--clr-grey-50); */
@@ -68,10 +78,10 @@ const Wrapper = styled.div`
     }
   }
   > div {
-    /* border-radius: 5px; */
     width: 450px;
   }
   .heading {
+    border-radius: 3px 3px 0 0;
     border: 1px solid var(--clr-grey-50);
   }
   .custom-loader {
