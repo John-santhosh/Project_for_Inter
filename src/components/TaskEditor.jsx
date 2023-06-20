@@ -22,6 +22,7 @@ function TaskEditor({ id, deleteIcon, setTaskOpen }) {
 
   const [dropDown, setDropDown] = useState(false);
   const [open, setOpen] = useState(false);
+  const [date, setDate] = useState(null);
   const refOne = useRef(null);
 
   const hideOnEscape = (e) => {
@@ -32,7 +33,8 @@ function TaskEditor({ id, deleteIcon, setTaskOpen }) {
   };
 
   const handleSelect = (date) => {
-    // console.log(format(date, "yyyy/MM/dd"));
+    console.log(date);
+    setDate(date);
     let stringdate = stringDate(format(date, "yyyy/MM/dd"), true);
 
     setFormData({ ...formData, task_date: stringdate });
@@ -169,6 +171,7 @@ function TaskEditor({ id, deleteIcon, setTaskOpen }) {
                   {/* {console.log(new Date(stringDate(formData.task_date)))} */}
                   {open && (
                     <Calendar
+                      date={date}
                       shownDate={new Date(stringDate(formData.task_date))}
                       onChange={handleSelect}
                       className="calendarElement"
@@ -308,6 +311,7 @@ const Wrapper = styled.div`
   .date {
     justify-content: space-between;
     margin: 0.625rem 0;
+
     > span {
       width: 45%;
       label {
@@ -318,7 +322,7 @@ const Wrapper = styled.div`
         -webkit-appearance: none;
         -moz-appearance: none;
         appearance: none;
-        margin-top: 5px;
+        /* margin-top: 5px; */
       }
 
       .date1 {
@@ -329,6 +333,7 @@ const Wrapper = styled.div`
         gap: 1rem;
         height: 2rem;
         margin-top: 5px;
+        border: 1px solid var(--clr-grey-50);
       }
     }
   }
@@ -373,6 +378,8 @@ const Wrapper = styled.div`
     width: 100%;
     height: 2rem;
     background-color: #ffffff;
+    border: 1px solid var(--clr-grey-50);
+
     margin-top: 0.7rem;
     position: relative;
     align-items: center;
@@ -435,7 +442,7 @@ const CalenderWrapper = styled.div`
 
   .d-flex {
     padding-left: 1rem;
-    gap: 0.5rem;
+    gap: 1rem;
   }
   .inputBox {
     border: none;
@@ -446,6 +453,8 @@ const CalenderWrapper = styled.div`
     width: 100px;
     border-radius: 3px;
     font-size: 1rem;
+    padding: 0;
+    margin: 0;
   }
 
   .calendarElement {
