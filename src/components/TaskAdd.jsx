@@ -56,13 +56,9 @@ const Wrapper = styled.div`
   }
   div.lastChild:last-child {
     border-radius: 0 0 3px 3px;
-    /* border: 1px solid var(--clr-grey-50); */
-    /* overflow: hidden; */
   }
   div.lastChild {
-    /* border-radius: 0 0 3px 3px; */
     border: 1px solid var(--clr-grey-50);
-    /* overflow: hidden; */
   }
   .addTask {
     background-color: #a9a9a918;
